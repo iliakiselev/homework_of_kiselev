@@ -31,32 +31,32 @@ async function callApi(prompt, text) {
     showSpinner(true);
     errorEl.textContent = '';
     try {
-        const headers = {'Content-Type':'application/json'};
+        const headers = { 'Content-Type': 'application/json' };
         const token = tokenEl.value.trim();
-        if(token) headers['Authorization'] = `Bearer ${token}`;
-
-        const res = await fetch('https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct', {
-            method:'POST',
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        const res = await fetch('https://api-inference.huggingface.co/models/tiiuae/Falcon3-7B-Base', {
+            method: 'POST',
             headers,
-            body: JSON.stringify({inputs: prompt + text})
+            body: JSON.stringify({ inputs: prompt + text })
         });
-
         if (!res.ok) {
             throw new Error(`API error: ${res.status} ${res.statusText}`);
         }
-
         const data = await res.json();
-        if (!data || !data.generated_text) throw new Error('Invalid response from API');
-
+        // модель может возвращать result либо generated_text или другой ключ — нужно проверить структуру ответа
+        // допустим, она возвращает { generated_text: "…" }
+        if (!data || typeof data.generated_text !== 'string') {
+            throw new Error('Invalid response from API');
+        }
         showSpinner(false);
         return data.generated_text.split('\n')[0].toLowerCase();
-
-    } catch(e) {
+    } catch (e) {
         showSpinner(false);
         errorEl.textContent = e.message;
         return '';
     }
 }
+
 
 
 document.getElementById('randomBtn').addEventListener('click', () => {
