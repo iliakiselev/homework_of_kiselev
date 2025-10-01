@@ -34,23 +34,30 @@ async function callApi(prompt, text) {
         const headers = {'Content-Type':'application/json'};
         const token = tokenEl.value.trim();
         if(token) headers['Authorization'] = `Bearer ${token}`;
+
         const res = await fetch('https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct', {
             method:'POST',
             headers,
             body: JSON.stringify({inputs: prompt + text})
         });
-        if(res.status===402) throw new Error('Quota exceeded (402)');
-        if(res.status===429) throw new Error('Rate limit (429)');
+
+        if (!res.ok) {
+            throw new Error(`API error: ${res.status} ${res.statusText}`);
+        }
+
         const data = await res.json();
-        if(!data || !data.generated_text) throw new Error('Invalid response');
+        if (!data || !data.generated_text) throw new Error('Invalid response from API');
+
         showSpinner(false);
         return data.generated_text.split('\n')[0].toLowerCase();
+
     } catch(e) {
         showSpinner(false);
         errorEl.textContent = e.message;
         return '';
     }
 }
+
 
 document.getElementById('randomBtn').addEventListener('click', () => {
     if(reviews.length===0){errorEl.textContent='Reviews not loaded yet.'; return;}
