@@ -61,15 +61,22 @@ async function analyzeSentiment(){
   resultEl.innerHTML = `<p>Sentiment: ${icon}</p>`;
 }
 
-// Подсчёт существительных
+// Подсчёт существительных на фронтенде
+function countNounsLocal(text){
+  const stopWords = ["I","You","He","She","It","We","They","The","A","An","And","Or","But","On","In","At","With","For","Of"];
+  const words = text.split(/\s+/);
+  let count = 0;
+  for(const w of words){
+    const word = w.replace(/[^a-zA-Z]/g,"");
+    if(!word) continue;
+    if(word[0] === word[0].toUpperCase() && !stopWords.includes(word)) count++;
+  }
+  return count;
+}
+
 async function countNouns(){
   if(!currentReview){ resultEl.textContent="Select a review first."; return; }
-  const resp = await callApi(
-    "Count the nouns in this review. Reply with a single number only: ",
-    currentReview
-  );
-  const match = resp.match(/\d+/);
-  const count = match ? parseInt(match[0]) : 0;
+  const count = countNounsLocal(currentReview);
   resultEl.innerHTML = `<p>Noun count: ${count}</p>`;
 }
 
