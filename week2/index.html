@@ -6,6 +6,7 @@
 <title>Review Analyzer</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://unpkg.com/compromise@13.11.3/builds/compromise.min.js"></script>
 <style>
   body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; background:#f5f5f5; }
   .container { max-width:600px; width:100%; background:#fff; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
@@ -21,7 +22,7 @@
 <body>
 <div class="container">
   <h1>Review Analyzer</h1>
-  <input type="text" id="apiToken" placeholder="Hugging Face API Token (optional)" value="">
+  <input type="text" id="apiToken" placeholder="Hugging Face API Token (optional)">
   <button id="randomBtn">Select Random Review</button>
   <button id="sentimentBtn">Analyze Sentiment</button>
   <button id="nounsBtn">Count Nouns</button>
