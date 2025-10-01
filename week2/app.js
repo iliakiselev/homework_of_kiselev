@@ -21,7 +21,7 @@ fetch("reviews_test.tsv")
 // Показываем/скрываем спиннер
 function showSpinner(show){ spinnerEl.style.display = show ? "block" : "none"; }
 
-// Выбор случайного отзыва
+// Случайный отзыв
 function getRandomReview(){
   if(!reviews.length){ reviewEl.textContent="Reviews not loaded yet."; return; }
   currentReview = reviews[Math.floor(Math.random()*reviews.length)];
@@ -65,10 +65,11 @@ async function analyzeSentiment(){
 async function countNouns(){
   if(!currentReview){ resultEl.textContent="Select a review first."; return; }
   const resp = await callApi(
-    "Count the nouns in this review and return only the number: ",
+    "Count the nouns in this review. Reply with a single number only: ",
     currentReview
   );
-  const count = parseInt(resp.match(/\d+/)?.[0] || "0");
+  const match = resp.match(/\d+/);
+  const count = match ? parseInt(match[0]) : 0;
   resultEl.innerHTML = `<p>Noun count: ${count}</p>`;
 }
 
