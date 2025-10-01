@@ -18,7 +18,7 @@ fetch("reviews_test.tsv")
   }}))
   .catch(e=>reviewEl.textContent="Error loading TSV");
 
-// Показываем/скрываем спиннер
+// Spinner
 function showSpinner(show){ spinnerEl.style.display = show ? "block" : "none"; }
 
 // Случайный отзыв
@@ -29,7 +29,7 @@ function getRandomReview(){
   resultEl.innerHTML = "";
 }
 
-// Общая функция вызова API
+// API вызов для Sentiment
 async function callApi(prompt, text){
   showSpinner(true);
   resultEl.textContent = "";
@@ -48,7 +48,7 @@ async function callApi(prompt, text){
   finally{ showSpinner(false); }
 }
 
-// Анализ настроения
+// Sentiment
 async function analyzeSentiment(){
   if(!currentReview){ resultEl.textContent="Select a review first."; return; }
   const resp = await callApi(
@@ -61,20 +61,12 @@ async function analyzeSentiment(){
   resultEl.innerHTML = `<p>Sentiment: ${icon}</p>`;
 }
 
-// Подсчёт существительных на фронтенде
+// Count nouns через Compromise.js
 function countNounsLocal(text){
-  const stopWords = ["I","You","He","She","It","We","They","The","A","An","And","Or","But","On","In","At","With","For","Of"];
-  const words = text.split(/\s+/);
-  let count = 0;
-  for(const w of words){
-    const word = w.replace(/[^a-zA-Z]/g,"");
-    if(!word) continue;
-    if(word[0] === word[0].toUpperCase() && !stopWords.includes(word)) count++;
-  }
-  return count;
+  return nlp(text).nouns().length;
 }
 
-async function countNouns(){
+function countNouns(){
   if(!currentReview){ resultEl.textContent="Select a review first."; return; }
   const count = countNounsLocal(currentReview);
   resultEl.innerHTML = `<p>Noun count: ${count}</p>`;
