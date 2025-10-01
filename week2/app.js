@@ -3,13 +3,16 @@ let reviews = [];
 let currentReview = '';
 
 fetch('reviews_test.tsv')
-    .then(r => r.text())
+    .then(response => {
+        if (!response.ok) throw new Error(`TSV file not found: ${response.status}`);
+        return response.text();
+    })
     .then(tsv => {
         Papa.parse(tsv, {
             header: true,
             delimiter: '\t',
-            complete: function(res) {
-                reviews = res.data.map(r => r.text).filter(Boolean);
+            complete: function(results) {
+                reviews = results.data.map(r => r.text).filter(Boolean);
             }
         });
     })
