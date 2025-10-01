@@ -57,11 +57,16 @@ async function analyzeReview() {
             body: JSON.stringify({ inputs: currentReview })
         });
 
-        if (!response.ok) throw new Error(`API error: ${response.status}`);
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status} ${response.statusText}`);
+        }
 
         const data = await response.json();
-
         console.log("API raw response:", data);
+
+        if (data.error) {
+            throw new Error(data.error);
+        }
 
         if (!Array.isArray(data) || !Array.isArray(data[0]) || !data[0][0]) {
             throw new Error("Unexpected API response format");
@@ -81,7 +86,7 @@ async function analyzeReview() {
             <p>Sentiment: ${icon}</p>
         `;
     } catch (err) {
-        console.error(err);
+        console.error("Analysis error:", err);
         resultEl.textContent = "Error analyzing sentiment. Check console for details.";
     }
 }
