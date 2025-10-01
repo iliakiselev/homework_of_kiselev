@@ -1,25 +1,68 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Random Review Sentiment Analyzer</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Sentiment Analyzer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    input, button {
+      padding: 10px;
+      margin: 8px 0;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #review, #result {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+    #result i {
+      font-size: 24px;
+      margin-left: 8px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Random Review Sentiment Analyzer</h1>
-
-    <label for="apiToken">Hugging Face API Token (optional):</label>
-    <input type="text" id="apiToken" placeholder="Enter token if available">
-
-    <button id="analyzeBtn">Analyze Random Review</button>
-
-    <div id="reviewContainer">
-        <p id="reviewText"></p>
-        <i id="sentimentIcon" class=""></i>
-    </div>
-
-    <script src="app.js"></script>
+  <div class="container">
+    <h1>Review Sentiment Analyzer</h1>
+    <input type="text" id="apiToken" placeholder="Hugging Face API Token (optional)">
+    <button id="loadBtn">Select Random Review</button>
+    <button id="analyzeBtn">Analyze Sentiment</button>
+    <div id="review">No review selected.</div>
+    <div id="result"></div>
+  </div>
+  <script src="app.js"></script>
 </body>
 </html>
