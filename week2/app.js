@@ -9,6 +9,7 @@ const randomBtn = document.getElementById("randomBtn");
 const sentimentBtn = document.getElementById("sentimentBtn");
 const nounsBtn = document.getElementById("nounsBtn");
 
+// Загружаем TSV
 fetch("reviews_test.tsv")
   .then(res => res.text())
   .then(tsv => Papa.parse(tsv, { header:true, delimiter:"\t", complete: r => {
@@ -17,8 +18,10 @@ fetch("reviews_test.tsv")
   }}))
   .catch(e=>reviewEl.textContent="Error loading TSV");
 
+// Показываем/скрываем спиннер
 function showSpinner(show){ spinnerEl.style.display = show ? "block" : "none"; }
 
+// Выбор случайного отзыва
 function getRandomReview(){
   if(!reviews.length){ reviewEl.textContent="Reviews not loaded yet."; return; }
   currentReview = reviews[Math.floor(Math.random()*reviews.length)];
@@ -26,6 +29,7 @@ function getRandomReview(){
   resultEl.innerHTML = "";
 }
 
+// Общая функция вызова API
 async function callApi(prompt, text){
   showSpinner(true);
   resultEl.textContent = "";
@@ -44,24 +48,31 @@ async function callApi(prompt, text){
   finally{ showSpinner(false); }
 }
 
+// Анализ настроения
 async function analyzeSentiment(){
   if(!currentReview){ resultEl.textContent="Select a review first."; return; }
-  const resp = await callApi("Classify this review as positive, negative, or neutral: ", currentReview);
+  const resp = await callApi(
+    "Classify this review as positive, negative, or neutral: ",
+    currentReview
+  );
   let icon = '<i class="fa-solid fa-question"></i>';
   if(resp.includes("positive")) icon='<i class="fa-solid fa-thumbs-up"></i>';
   else if(resp.includes("negative")) icon='<i class="fa-solid fa-thumbs-down"></i>';
   resultEl.innerHTML = `<p>Sentiment: ${icon}</p>`;
 }
 
+// Подсчёт существительных
 async function countNouns(){
   if(!currentReview){ resultEl.textContent="Select a review first."; return; }
-  const resp = await callApi("Count the nouns in this review and return only High (>15), Medium (6-15), or Low (<6): ", currentReview);
-  let icon = "🟢";
-  if(resp.includes("medium")) icon="🟡";
-  else if(resp.includes("low")) icon="🔴";
-  resultEl.innerHTML = `<p>Noun count level: ${icon}</p>`;
+  const resp = await callApi(
+    "Count the nouns in this review and return only the number: ",
+    currentReview
+  );
+  const count = parseInt(resp.match(/\d+/)?.[0] || "0");
+  resultEl.innerHTML = `<p>Noun count: ${count}</p>`;
 }
 
+// Обработчики кнопок
 randomBtn.addEventListener("click", getRandomReview);
 sentimentBtn.addEventListener("click", analyzeSentiment);
 nounsBtn.addEventListener("click", countNouns);
