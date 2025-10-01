@@ -61,6 +61,8 @@ async function analyzeReview() {
 
         const data = await response.json();
 
+        console.log("API raw response:", data);
+
         if (!Array.isArray(data) || !Array.isArray(data[0]) || !data[0][0]) {
             throw new Error("Unexpected API response format");
         }
