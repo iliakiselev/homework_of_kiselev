@@ -1,0 +1,29 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Review Analyzer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+        input, button { padding: 0.5rem; margin: 0.5rem 0; width: 100%; }
+        button { cursor: pointer; }
+        #result { border: 1px solid #ccc; padding: 1rem; margin-top: 1rem; min-height: 80px; }
+        #error { color: red; margin-top: 1rem; }
+        #spinner { display: none; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <h1>Review Analyzer</h1>
+    <input type="text" id="apiToken" placeholder="Hugging Face API Token (optional)">
+    <button id="randomBtn">Select Random Review</button>
+    <button id="sentimentBtn">Analyze Sentiment</button>
+    <button id="nounBtn">Count Nouns</button>
+    <div id="spinner">⏳ Loading...</div>
+    <div id="result"><p id="reviewText"></p><p id="sentimentIcon"></p><p id="nounIcon"></p></div>
+    <div id="error"></div>
+    <script src="app.js"></script>
+</body>
+</html>
